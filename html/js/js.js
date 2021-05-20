@@ -51,6 +51,7 @@ class Usuario {
 }
 
 
+
 window.onload = function() {
   cargarFoto();
   cargarPublicacionesHome();
@@ -137,8 +138,31 @@ function consultaComentarios(publicacion) {
   console.log(respuestaCrearPublicacion);
 }
 
-function autorClick(data) {
-  console.log('autor click', data);
+function autorClick(id) {
+  var consulta = new ConsultarApi();
+  var datoUsuario = new Usuario();
+  let data = {
+    'id': id
+  }
+  var consultaUsuarios = consulta.consultaPostParametros('consultarUsuario.php', data );
+  consultaUsuarios.then( respuestaUsuario  => {
+    console.log(respuestaUsuario)
+    let municipio = {
+      'id': respuestaUsuario.id_municipios
+    };
+    var datosUsuario = datoUsuario;
+    var consultaMunucipios = consulta.consultaPostParametros( 'consultarMunicipios.php', municipio );
+    consultaMunucipios.then( respuestaMunicipio => {
+      console.log(respuestaMunicipio);
+      datosUsuario.municipio = respuestaMunicipio.nombre_mun;
+      datosUsuario.nombre = respuestaUsuario.nombre_usuario;
+      datosUsuario.apellido = respuestaUsuario.apellido;
+      datosUsuario.sexo = respuestaUsuario.sexo === 'F' ? 'Femenino' : respuestaUsuario.sexo === 'M' ? 'Masculino' : 'Otro';
+      console.log(datosUsuario); //TODO: al terminar la vista enviarle estos Datos
+    })
+
+  });
+  
 }
 
 function cargarFoto() {
