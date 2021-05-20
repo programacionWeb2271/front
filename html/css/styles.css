@@ -1,3 +1,6 @@
+body {
+  min-width: 350px;
+}
 .group-menu {
   display: -webkit-flex;
 	display: flex;
@@ -33,12 +36,37 @@
   padding-right: 2rem;
   padding-bottom: 2rem;
 }
+.autor {
+  cursor: pointer;
+  display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: row;
+	flex-direction: row;
+  font-size: 13px;
+}
+
+
+.autorData {
+  margin-top: 10px;
+  margin-left: 5px;
+}
+
+.name {
+  margin-top: 6px;
+  font-size: 16px;
+  font-weight: 800;
+}
 
 .imgPost img{
   margin-top: 2rem;
   width: 100%;
 }
-
+.imgRedondaFeed {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius:50%;
+}
 .imgRedonda {
   position: relative;
   width:70px;
@@ -48,4 +76,8 @@
 
 .textPost{
   margin-top: 2rem;
+}
+
+.btn-guardar {
+  margin-top: 1rem;
 }

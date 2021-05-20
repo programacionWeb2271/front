@@ -2,21 +2,23 @@ class publicacionGeneral extends HTMLElement {
 
   constructor() {
     super();
-    this.autorImage = '';
-    this.autorNombre = '';
+    this.foto = '';
+    this.autor = '';
     this.texto = '';
-    this.imagen = '../resources/publicaciones/p1.jpeg';
+    this.imagen = '';
     this.fecha = '';
+    this.idAutor = '';
   }
 
   static get observedAttributes() {
-    return ['data'];
+    return ['foto', 'texto', 'imagen', 'fecha', 'autor', 'idautor'];
   }
 
   attributeChangedCallback(nameAttr, oldVal, newVal) {
+    console.log(nameAttr, newVal);
     switch(nameAttr){
       case 'foto':
-        this.autorImag = newVal;
+        this.foto = newVal;
         break;
       case 'texto':
         this.texto = newVal;
@@ -27,8 +29,10 @@ class publicacionGeneral extends HTMLElement {
       case 'fecha':
         this.fecha = newVal;
         break;
-      case 'nombre':
-        this.autorNombre = newVal;
+      case 'autor':
+        this.autor = newVal;
+      case 'idautor':
+        this.idAutor = newVal;
       default:
         break;
     }
@@ -37,13 +41,17 @@ class publicacionGeneral extends HTMLElement {
   connectedCallback(){
     this.innerHTML= `
       <div class="publicacion">
-        <div class="autor">
-          <img src="${this.autorImag}">
-          ${this.autorNombre}
-          ${this.fecha}
+        <div class="autor" onclick="autorClick(${this.idAutor})">
+          <img class="imgRedondaFeed" src="${this.foto}">
+          <div class="autorData name">
+            ${this.autor}
+          </div>
+          <div class="autorData">
+            ${this.fecha}
+          </div>
         </div>
         <div class="imgPost">
-          <img src="${this.texto}">
+          <img src="${this.imagen}">
         </div>
         <div class="textPost">
           <span>
