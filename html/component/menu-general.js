@@ -19,15 +19,6 @@ class menuGeneral extends HTMLElement {
             </div>
           </div>
           <div class="item-menu">
-            <div onclick="clickNew()">
-              <i
-              id="btn-new"
-              class="bi-plus-square"
-              style="font-size: 2rem; color: cornflowerblue;"></i>
-              Nuevo
-            </div>
-          </div>
-          <div class="item-menu">
             <div onclick="clickShop()">
               <i
               id="btn-shop"

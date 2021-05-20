@@ -21,8 +21,7 @@ class ConsultarApi {
   consultaPostParametros(servicio, params) {
     let formData = new FormData();
     for (const prop in params){
-      console.log(params.pro = params[prop]);
-      formData.append(params.pro, params[prop]);
+      formData.append(prop.toString(), params[prop]);
     }
     return fetch( 'http://api.weavernetwork.online/' + servicio, {
       method: 'POST',
@@ -34,7 +33,7 @@ class ConsultarApi {
   }
 }
 
-class usuario {
+class Usuario {
   constructor (
     nombre = '',
     apellido = '',
@@ -81,31 +80,32 @@ function  clickPerfil() {
 }
 
 function cargarPublicacionesHome() {
-  let consulta = new ConsultarApi();
-  let promesa = consulta.consultaGet('consultarTodaPublicacion.php');
+  var consulta = new ConsultarApi();
+  var promesa = consulta.consultaGet('consultarTodaPublicacion.php');
 
   promesa.then( respuesta => {
     respuesta.data.map(function(publicacion) {
       let data = {
         'id': publicacion.id_usuario
       }
-      let consultaUsuarios = consulta.consultaPostParametros('consultarUsuario.php', data );
+      var datosUsuario = new Usuario();
+      var consultaUsuarios = consulta.consultaPostParametros('consultarUsuario.php', data );
       consultaUsuarios.then( respuestaUsuario  => {
-        console.log(respuestaUsuario);
+        datosUsuario.nombre = respuestaUsuario.nombre_usuario;
+        datosUsuario.apellido = respuestaUsuario.apellido;
+        datosUsuario.foto = respuestaUsuario.foto_perfil;
+        let bodyHome = document.getElementById('bodyHome');
+        let publicacionBody = document.createElement("publicacion-general");
+        publicacionBody.setAttribute('autor', datosUsuario.nombre + ' ' + datosUsuario.apellido);
+        publicacionBody.setAttribute('foto', datosUsuario.foto);
+        publicacionBody.setAttribute('texto', publicacion.texto);
+        publicacionBody.setAttribute('imagen', publicacion.imagen);
+        publicacionBody.setAttribute('fecha', publicacion.fecha);
+        publicacionBody.setAttribute('idautor', publicacion.id_usuario);
+        bodyHome.appendChild(publicacionBody);
       })
-      let bodyHome = document.getElementById('bodyHome');
-      let publicacionBody = document.createElement("publicacion-general");
-      publicacionBody.setAttribute("texto", publicacion.texto);
-      publicacionBody.setAttribute("imagen", publicacion.imagen);
-      publicacionBody.setAttribute("fecha", publicacion.fecha);
-      publicacionBody.setAttribute("idautor", publicacion.id_autor);
-      bodyHome.appendChild(publicacionBody);
     })
   });
-}
-
-function consultarDatosUsuario(id) {
-  
 }
 
 function cargarPublicacionesVentas() {

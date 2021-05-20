@@ -15,7 +15,6 @@ class publicacionGeneral extends HTMLElement {
   }
 
   attributeChangedCallback(nameAttr, oldVal, newVal) {
-    console.log(nameAttr, newVal);
     switch(nameAttr){
       case 'foto':
         this.foto = newVal;
