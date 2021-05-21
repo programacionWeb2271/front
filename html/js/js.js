@@ -9,9 +9,10 @@ class ConsultarApi {
   }
 
   consultaPostBody(servicio, body) {
+    console.log(body);
     return fetch( 'http://api.weavernetwork.online/' + servicio, {
       method: 'POST',
-      body: body
+      body: JSON.stringify(body)
     })
     .then(( response ) => {
         return response.json();
@@ -53,9 +54,16 @@ class Usuario {
 
 
 window.onload = function() {
-  cargarFoto();
   cargarPublicacionesHome();
+  verificarLogin();
 };
+
+function verificarLogin() {
+  var id = localStorage.getItem('weaver');
+  if(id === null) {
+    window.location.replace('../index.html');
+  }
+}
 
 function clickHome() {
   window.location.replace('./home.html');
@@ -144,29 +152,48 @@ function autorClick(id) {
   let data = {
     'id': id
   }
-  var consultaUsuarios = consulta.consultaPostParametros('consultarUsuario.php', data );
+  var consultaUsuarios = consulta.consultaPostParametros( 'consultarUsuario.php', data );
   consultaUsuarios.then( respuestaUsuario  => {
-    console.log(respuestaUsuario)
     let municipio = {
       'id': respuestaUsuario.id_municipios
     };
     var datosUsuario = datoUsuario;
     var consultaMunucipios = consulta.consultaPostParametros( 'consultarMunicipios.php', municipio );
     consultaMunucipios.then( respuestaMunicipio => {
-      console.log(respuestaMunicipio);
       datosUsuario.municipio = respuestaMunicipio.nombre_mun;
       datosUsuario.nombre = respuestaUsuario.nombre_usuario;
       datosUsuario.apellido = respuestaUsuario.apellido;
       datosUsuario.sexo = respuestaUsuario.sexo === 'F' ? 'Femenino' : respuestaUsuario.sexo === 'M' ? 'Masculino' : 'Otro';
       console.log(datosUsuario); //TODO: al terminar la vista enviarle estos Datos
     })
-
   });
-  
 }
 
-function cargarFoto() {
-  document.getElementById('cargaImagen').addEventListener('onchange', function (){
-    console.log('change')
-  });
+function guardarPublicacion() {
+  var textoPublicacion = document.getElementById('textoPublicacion').value;
+  var imagenPublicacion = document.getElementById('imagenPublicacion').files[0];
+  var leerImagen = new FileReader();
+  var consulta = new ConsultarApi();
+  if (imagenPublicacion) {
+    leerImagen.readAsDataURL(imagenPublicacion);
+  }
+
+  leerImagen.addEventListener('load', function() {
+    console.log( textoPublicacion, leerImagen.result, localStorage.getItem('weaver') );
+    var data = {
+      'usuario': localStorage.getItem('weaver'),
+      'texto': textoPublicacion,
+      'imagen': leerImagen.result,
+      'tipo': 'V',
+      'estado': 'A'
+    };
+    var creacionPublicacion = consulta.consultaPostBody( 'crearPublicacion.php', data );
+    creacionPublicacion.then(respuesta => {
+      if(respuesta.message === 'Se ha creado la publicacion.'){
+        window.location.replace('./home.html');
+      }else{
+        console.log( 'error crear publicación' );
+      }
+    })
+  }, false);
 }
