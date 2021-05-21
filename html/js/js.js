@@ -70,14 +70,6 @@ function clickHome() {
   console.log('clickHome');
 }
 
-function clickNew() {
-  console.log('clickNew');
-  let consulta = new ConsultarApi();
-  let promesa = consulta.consultaGet('consultarTodaPublicacion.php');
-  promesa.then( respuesta => {
-    console.log(respuesta);
-  });
-}
 
 function clickShop() {
   window.location.replace('./shop.html');
@@ -85,6 +77,8 @@ function clickShop() {
 }
 
 function  clickPerfil() {
+  localStorage.clear();
+  window.location.replace('../index.html');
   console.log('clickPerfil');
 }
 

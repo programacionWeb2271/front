@@ -7,7 +7,8 @@ class escribirPublicacion extends HTMLElement {
   connectedCallback(){
     this.innerHTML= `
     <div class="publicacion">
-      <div class="form-group file-upload-wrapper" >
+      <div class="form-group file-upload-wrapper">
+      <h4>Escribe una publicación </h4>
         <textarea class="form-control" id="textoPublicacion" rows="3"></textarea>
       </div>
       <div class="custom-file">
